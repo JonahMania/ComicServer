@@ -2,11 +2,17 @@ const express = require("express");
 const exphbs = require("express-handlebars");
 const handlebars = require("handlebars");
 
+const extractComic = require("./utils/extractComic");
+
 const static = express.static(__dirname + "/public");
 const path = require("path");
 const app = express();
 const port = 8080;
 const configRoutes = require("./routes");
+
+const comicDirectory = "/home/jonahmania/Documents/comics";
+
+extractComic.generateCoverArt(comicDirectory);
 
 const handlebarsInstance = exphbs.create({
     defaultLayout: 'main',

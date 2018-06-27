@@ -48,8 +48,44 @@ function extractComic(rarPath, outputDir, callback){
 }
 
 //Recursivly scan directory and create thumbnail images for all cbr files found
-function generateCoverArt(directory, callback){
-
+function generateCoverArt(directory){
+    fs.readdir(directory, function(error, list) {
+        if(error){
+            console.error(error);
+            return;
+        }
+        list.forEach(function(file){
+            if(file){
+                file = directory + '/' + file;
+                fs.stat(file, function(error, stat){
+                    if(stat && stat.isDirectory()){
+                        generateCoverArt(file);
+                    }else if(stat && path.extname(file) === ".cbr"){
+                        //Found cbr file
+                        var archive = new unrar(file);
+                        archive.list(function(error, entries){
+                            if(error){
+                                console.error(error);
+                            }else{
+                                //Use first image as cover
+                                var files = entries.filter(function(entry){return entry.type === "File";})
+                                if(files.length > 1){
+                                    var cover = files[0];
+                                    var coverPath = directory + "/COVER_" + path.basename(file, ".cbr") + path.extname(cover.name);
+                                    if(!fs.existsSync(coverPath)){
+                                        var stream = archive.stream(cover.name);
+                                        stream.on("error", console.error);
+                                        stream.pipe(fs.createWriteStream(coverPath));
+                                    }
+                                }
+                            }
+                       });
+                    }
+                });
+            }
+        });
+    });
 }
 
 module.exports.extractComic = extractComic;
+module.exports.generateCoverArt = generateCoverArt;
