@@ -1,0 +1,14 @@
+{
+  "name": "comicwebserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodejs index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "unrar": "^0.1.7"
+  }
+}
