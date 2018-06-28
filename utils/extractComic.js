@@ -6,6 +6,7 @@ var archive = new unrar(path);
 
 function extractComic(rarPath, outputDir, callback){
     var archive = new unrar(rarPath);
+    var returnFiles = [];
     archive.list(function(error, entries){
         if(error){
             callback(error, null);
@@ -37,12 +38,15 @@ function extractComic(rarPath, outputDir, callback){
             //Create all files
             files.forEach(function(file){
                 var filePath = comicFolder + "/" + file.name;
+                returnFiles.push(filePath);
                 if(!fs.existsSync(filePath)){
                     var stream = archive.stream(file.name);
                     stream.on("error", console.error);
                     stream.pipe(fs.createWriteStream(filePath));
                 }
             });
+
+            callback(null, returnFiles);
         }
     });
 }

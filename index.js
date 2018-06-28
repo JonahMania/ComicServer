@@ -11,6 +11,7 @@ const port = 8080;
 const configRoutes = require("./routes");
 
 const comicDirectory = "/home/jonahmania/Documents/comics";
+const cacheDirectory = "public/cache";
 
 extractComic.generateCoverArt(comicDirectory);
 
@@ -26,9 +27,11 @@ const handlebarsInstance = exphbs.create({
     }
 });
 
-app.engine('handlebars', handlebarsInstance.engine);
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'handlebars');
+app.engine("handlebars", handlebarsInstance.engine);
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "handlebars");
+app.set("comicDirectory", comicDirectory);
+app.set("cacheDirectory", cacheDirectory);
 
 app.use("/public", static);
 configRoutes(app);
