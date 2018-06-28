@@ -2,10 +2,80 @@
 <link rel="stylesheet" href="/public/css/comic.css">
 {{/section}}
 {{#section "scripts"}}
+<script>
+    var pages = [
+    {{#each pages}}
+        "/{{this}}",
+    {{/each}}
+    ]
+    var numPages = pages.length;
+    var pageCounter = {{page}};
+    var currentPage = document.getElementById("current_page");
+
+    function updateURLParameter(param, paramVal){
+        var url = window.location.href;
+        var newAdditionalURL = "";
+        var tempArray = url.split("?");
+        var baseURL = tempArray[0];
+        var additionalURL = tempArray[1];
+        var temp = "";
+        if(additionalURL){
+            tempArray = additionalURL.split("&");
+            for (var i=0; i<tempArray.length; i++){
+                if(tempArray[i].split('=')[0] != param){
+                    newAdditionalURL += temp + tempArray[i];
+                    temp = "&";
+                }
+            }
+        }
+
+        var rows_txt = temp + "" + param + "=" + paramVal;
+        window.history.replaceState("", "", baseURL + "?" + newAdditionalURL + rows_txt);
+    }
+
+    function setPage(pageNumber){
+        if(pageNumber > numPages){
+            pageNumber = numPages;
+        }
+        if(pageNumber < 1){
+            pageNumber = 1;
+        }
+        currentPage.src = pages[pageNumber - 1];
+        updateURLParameter("page", pageNumber);
+    }
+
+    function nextPage(){
+        pageCounter++;
+        if(pageCounter > numPages){
+            pageCounter = numPages;
+        }
+        currentPage.src = pages[pageCounter - 1];
+        updateURLParameter("page", pageCounter);
+    }
+
+    function previousPage(){
+        pageCounter--;
+        if(pageCounter < 1){
+            pageCounter = 1;
+        }
+        currentPage.src = pages[pageCounter - 1];
+        updateURLParameter("page", pageCounter);
+    }
+    
+    document.onkeydown = function(event) {
+        event = event || window.event;
+        if(event.keyCode == 39 || event.keyCode == 68 || event.keyCode == 76){
+            nextPage();
+        }
+        if(event.keyCode == 37 || event.keyCode == 65 || event.keyCode == 72){
+            previousPage();
+        }
+    };
+
+    setPage(pageCounter);
+</script>
 {{/section}}
 
-<div>
-    {{#each pages}}
-        <img src="/{{this}}" width="256", height="256"></img>
-    {{/each}} 
+<div id="current_page_container">
+    <img id="current_page"></img>
 </div>

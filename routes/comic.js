@@ -6,7 +6,7 @@ const extractComic = require("../utils/extractComic");
 router.get('/*', function(req, res){
     var file = path.join(req.app.get("comicDirectory"), req.path) + ".cbr";
     var cacheDirectory = req.app.get("cacheDirectory");
-
+    var page=req.query.page || 1;
     if(!fs.existsSync(file)){
             route = path.resolve(`public/error.html`);
             res.sendFile(route);
@@ -18,7 +18,7 @@ router.get('/*', function(req, res){
             route = path.resolve(`public/error.html`);
             res.sendFile(route);
         }else{
-            res.render("comic/comic", {pages:response});
+            res.render("comic/comic", {"pages":response, "page":page});
         }
     });
 });

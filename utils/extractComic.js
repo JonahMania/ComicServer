@@ -45,7 +45,7 @@ function extractComic(rarPath, outputDir, callback){
                     stream.pipe(fs.createWriteStream(filePath));
                 }
             });
-
+            returnFiles.sort();
             callback(null, returnFiles);
         }
     });
