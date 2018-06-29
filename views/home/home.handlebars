@@ -4,6 +4,11 @@
 {{#section "scripts"}}
 {{/section}}
 
-<div id="collections">
-    
+<div id="links">
+    {{#each links}}
+    <a href="{{this.link}}">
+        <image src="{{this.image}}"></image>
+        <div>{{this.name}}</div>
+    </a>
+    {{/each}}
 </div>

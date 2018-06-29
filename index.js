@@ -12,8 +12,9 @@ const configRoutes = require("./routes");
 
 const comicDirectory = "/home/jonahmania/Documents/comics";
 const cacheDirectory = "public/cache";
+const coverArtDirectory = "public/coverArt";
 
-extractComic.generateCoverArt(comicDirectory);
+extractComic.generateCoverArt(comicDirectory, coverArtDirectory);
 
 const handlebarsInstance = exphbs.create({
     defaultLayout: 'main',
@@ -32,6 +33,7 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "handlebars");
 app.set("comicDirectory", comicDirectory);
 app.set("cacheDirectory", cacheDirectory);
+app.set("coverArtDirectory", coverArtDirectory);
 
 app.use("/public", static);
 configRoutes(app);
