@@ -56,7 +56,7 @@ function generateCoverArt(directory, outputDirectory){
     if(!fs.existsSync(outputDirectory)){
         fs.mkdirSync(outputDirectory);
     }
-   
+
     fs.readdir(directory, function(error, list){
         if(error){
             console.error(error);
@@ -80,7 +80,7 @@ function generateCoverArt(directory, outputDirectory){
                 if(!fs.existsSync(path.join(outputDirectory, collection))){
                     fs.mkdirSync(path.join(outputDirectory, collection));
                 }
-                
+
                 comics.forEach(function(comic){
                     //Found cbr file
                     var archive = new unrar(path.join(directory, collection, comic));
@@ -89,7 +89,13 @@ function generateCoverArt(directory, outputDirectory){
                             console.error(error);
                         }else{
                             //Use first image as cover
-                            var files = entries.filter(function(entry){return entry.type === "File";}).sort(function(a, b){return a.name > b.name});
+                            var files = entries.filter(function(entry){return entry.type === "File";}).sort(function(a, b){
+                                if(a.name < b.name)
+                                    return -1;
+                                if(a.name > b.name)
+                                    return 1;
+                                return 0;
+                            });
                             if(files.length > 1){
                                 var cover = files[0];
                                 var coverPath = path.join(outputDirectory, collection, "COVER_" + path.basename(comic, ".cbr") + path.extname(cover.name));
