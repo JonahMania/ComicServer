@@ -12,7 +12,7 @@ router.get('/*', function(req, res){
             res.sendFile(route);
             return;
     }
-    
+
     extractComic.extractComic(file, cacheDirectory, function(error, response){
         if(error){
             route = path.resolve(`public/error.html`);
