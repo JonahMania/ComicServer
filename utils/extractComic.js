@@ -36,7 +36,7 @@ function extractComic(rarPath, outputDir, callback){
             //Create all files
             files.forEach(function(file){
                 var filePath = comicFolder + "/" + file.name;
-                returnFiles.push(filePath);
+                returnFiles.push(path.relative(path.join(__dirname, ".."), filePath));
                 if(!fs.existsSync(filePath)){
                     var stream = archive.stream(file.name);
                     stream.on("error", console.error);

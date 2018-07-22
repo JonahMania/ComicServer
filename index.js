@@ -2,15 +2,15 @@ const express = require("express");
 const exphbs = require("express-handlebars");
 const handlebars = require("handlebars");
 const serveIndex = require("serve-index");
+const path = require("path");
 
 const comic = require("./routes/comic");
 
-const static = express.static(__dirname + "/public");
-const path = require("path");
+const static = express.static(path.join(__dirname, "public"));
 const app = express();
 var port = 8080;
 
-const cacheDirectory = "public/cache";
+const cacheDirectory = path.join(__dirname, "public/cache");
 
 var program = require("commander");
 
@@ -33,6 +33,7 @@ if(program.port){
 }
 
 const handlebarsInstance = exphbs.create({
+    layoutsDir: path.join(__dirname, "views/layouts"),
     defaultLayout: 'main',
     // Specify helpers which are only registered on this instance.
     helpers: {
