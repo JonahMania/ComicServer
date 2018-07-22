@@ -8,13 +8,14 @@ router.get("/*.cbr", function(req, res){
     var cacheDirectory = req.app.get("cacheDirectory");
     var page = req.query.page || 1;
     if(!fs.existsSync(file)){
-            route = path.resolve(`public/error.html`);
-            res.sendFile(route);
-            return;
+        route = path.resolve(`public/error.html`);
+        res.sendFile(route);
+        return;
     }
 
     extractComic.extractComic(file, cacheDirectory, function(error, response){
         if(error){
+            console.error(error);
             route = path.resolve(`public/error.html`);
             res.sendFile(route);
         }else{
