@@ -8,10 +8,29 @@ const comic = require("./routes/comic");
 const static = express.static(__dirname + "/public");
 const path = require("path");
 const app = express();
-const port = 8080;
+var port = 8080;
 
-const comicDirectory = "/home/jonahmania/Documents/comics";
 const cacheDirectory = "public/cache";
+
+var program = require("commander");
+
+program
+    .version("0.0.0")
+    .arguments("<directory>")
+    .action(function(directory){
+        comicDirectory = directory;
+    })
+    .option("-p, --port [port]", "Server port")
+    .parse(process.argv);
+
+if(typeof comicDirectory === "undefined"){
+    console.error("Directory argument required");
+    process.exit(1);
+}
+
+if(program.port){
+    port = program.port;
+}
 
 const handlebarsInstance = exphbs.create({
     defaultLayout: 'main',
@@ -37,7 +56,7 @@ app.use("/data", express.static(comicDirectory), serveIndex(comicDirectory, {"ic
 app.use("*", function(req, res){
     route = path.resolve(`public/error.html`);
     res.sendFile(route);
-})
+});
 
 app.listen(port, function(){
     console.log("server running on http://localhost:" + port);
