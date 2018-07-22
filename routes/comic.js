@@ -3,10 +3,10 @@ const fs = require("fs");
 const path = require("path");
 const extractComic = require("../utils/extractComic");
 
-router.get('/*', function(req, res){
-    var file = path.join(req.app.get("comicDirectory"), req.path) + ".cbr";
+router.get("/*.cbr", function(req, res){
+    var file = path.join(req.app.get("comicDirectory"), unescape(req.path));
     var cacheDirectory = req.app.get("cacheDirectory");
-    var page=req.query.page || 1;
+    var page = req.query.page || 1;
     if(!fs.existsSync(file)){
             route = path.resolve(`public/error.html`);
             res.sendFile(route);
