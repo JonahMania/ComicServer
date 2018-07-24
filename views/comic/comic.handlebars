@@ -11,6 +11,7 @@
     var numPages = pages.length;
     var pageCounter = {{page}};
     var currentPage = document.getElementById("current_page");
+    var body = document.getElementsByTagName("body")[0];
 
     function updateURLParameter(param, paramVal){
         var url = window.location.href;
@@ -61,7 +62,7 @@
         currentPage.src = pages[pageCounter - 1];
         updateURLParameter("page", pageCounter);
     }
-    
+
     document.onkeydown = function(event) {
         event = event || window.event;
         if(event.keyCode == 39 || event.keyCode == 68 || event.keyCode == 76){
@@ -71,6 +72,14 @@
             previousPage();
         }
     };
+
+    body.onclick = function(event){
+        if(event.clientX > body.offsetWidth / 2){
+            nextPage();
+        }else{
+            previousPage();
+        }
+    }
 
     setPage(pageCounter);
 </script>
