@@ -7,6 +7,7 @@ const path = require("path");
 const comic = require("./routes/comic");
 
 const static = express.static(path.join(__dirname, "public"));
+const errorFile = path.join(__dirname, "public/error.html");
 const app = express();
 var port = 8080;
 
@@ -55,7 +56,7 @@ app.use("/public", static);
 app.use("/data", comic);
 app.use("/data", express.static(comicDirectory), serveIndex(comicDirectory, {"icons": true}))
 app.use("*", function(req, res){
-    route = path.resolve(`public/error.html`);
+    route = path.resolve(errorFile);
     res.sendFile(route);
 });
 
