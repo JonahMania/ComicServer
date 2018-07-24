@@ -1,6 +1,9 @@
 const fs = require("fs");
 const path = require("path");
 const unrar = require("unrar");
+const sharp = require("sharp");
+
+const MAX_PAGE_WIDTH = 900;
 
 function extractComic(rarPath, outputDir, callback){
     var archive = new unrar(rarPath);
@@ -38,9 +41,10 @@ function extractComic(rarPath, outputDir, callback){
                 var filePath = comicFolder + "/" + file.name;
                 returnFiles.push(escape(path.relative(path.join(__dirname, ".."), filePath)));
                 if(!fs.existsSync(filePath)){
+                    const resizer = sharp().resize(MAX_PAGE_WIDTH);
                     var stream = archive.stream(file.name);
                     stream.on("error", console.error);
-                    stream.pipe(fs.createWriteStream(filePath));
+                    stream.pipe(resizer).pipe(fs.createWriteStream(filePath));
                 }
             });
             returnFiles.sort();

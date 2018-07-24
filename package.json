@@ -14,6 +14,7 @@
     "express-handlebars": "^3.0.0",
     "handlebars": "^4.0.11",
     "serve-index": "^1.9.1",
+    "sharp": "^0.20.5",
     "unrar": "^0.1.7"
   }
 }
